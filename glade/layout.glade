@@ -14,6 +14,7 @@
     <property name="default_height">480</property>
     <property name="icon">../img/logo.png</property>
     <signal name="destroy" handler="on_window_main_destroy" swapped="no"/>
+    <signal name="key-press-event" handler="on_key_press" swapped="no"/>
     <child type="titlebar">
       <placeholder/>
     </child>

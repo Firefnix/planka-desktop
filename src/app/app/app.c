@@ -13,6 +13,7 @@ static void load_webkit_types(void)
 void setup(const gchar *uri)
 {
 	load_webkit_types();
+	connect_signals();
     struct AppWidgets *widgets = get_widgets();
 
 	webview_load(uri);

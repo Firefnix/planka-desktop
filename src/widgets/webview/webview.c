@@ -27,3 +27,8 @@ void on_webkit_webview_load_changed(
             g_assert_not_reached();
     }
 }
+
+void add_webview_callback_symbols(void)
+{
+    // No callbacks yet
+}

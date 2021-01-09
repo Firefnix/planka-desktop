@@ -23,3 +23,26 @@ void on_window_main_destroy(void)
 {
 	gtk_main_quit();
 }
+
+void on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+	if (event->type == GDK_KEY_PRESS) {
+		if (event->state & GDK_CONTROL_MASK && event->state & GDK_KEY_w) {
+			on_window_main_destroy();
+		}
+	}
+}
+
+void add_window_callback_symbols(void)
+{
+	gtk_builder_add_callback_symbol(
+		get_builder(),
+		"on_window_main_destroy",
+		G_CALLBACK(on_window_main_destroy)
+	);
+	gtk_builder_add_callback_symbol(
+		get_builder(),
+		"on_key_press",
+		G_CALLBACK(on_key_press)
+	);
+}

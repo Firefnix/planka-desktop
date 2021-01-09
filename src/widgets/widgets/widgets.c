@@ -25,5 +25,7 @@ void free_widgets(void)
 /// Connect the signals of the widgets to the event callbacks
 void connect_signals(void)
 {
+    add_window_callback_symbols();
+    add_webview_callback_symbols();
     gtk_builder_connect_signals(get_builder(), get_widgets());
 }
