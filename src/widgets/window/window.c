@@ -27,7 +27,7 @@ void on_window_main_destroy(void)
 void on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
 	if (event->type == GDK_KEY_PRESS) {
-		if (event->state & GDK_CONTROL_MASK && event->state & GDK_KEY_w) {
+		if (event->state & GDK_CONTROL_MASK && event->keyval == GDK_KEY_w) {
 			on_window_main_destroy();
 		}
 	}
