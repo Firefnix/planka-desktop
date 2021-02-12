@@ -1,0 +1,89 @@
+#!/bin/sh
+#!/bin/sh
+
+main() {
+  if should_show_help "$@"; then
+    show_help
+    exit 0
+  elif should_launch_new_instance "$@"; then
+    launch_new_instance "$@"
+  else
+    focus_window || launch_new_instance "$@"
+  fi
+}
+
+#~~~ Help ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+show_help() {
+  printf '\033[1m%s\033[0m' 'Planka'
+  cat <<EOF
+: Free open source kanban board for workgroups.
+
+Usage:
+    planka [options]
+Options:
+    -h, --help          Display this help message
+    -n, --new-instance  Always launch new instance (don't focus an already
+                        running window)
+    -d, --detach        Detach process after launching new instance
+
+Home page: https://planka.app/
+EOF
+}
+
+#~~~ Arguments ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+is_argument() {
+  short_arg="$1"
+  long_arg="$2"
+  shift
+  shift
+  for i in "$@"; do
+    if [ "$i" = "-${short_arg}" ] || [ "$i" = "--${long_arg}" ]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+should_show_help() {
+  is_argument 'h' 'help' "$@"
+}
+
+should_launch_new_instance() {
+  is_argument 'n' 'new-instance' "$@"
+}
+
+should_detach_process() {
+  is_argument 'd' 'detach' "$@"
+}
+
+should_install() {
+  
+}
+
+#~~~ Tasks ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+remove_theme_warning() {
+  grep -E -v "Gtk-WARNING.+Invalid name of pseudo-class"
+}
+
+launch_new_instance() {
+  cd "$(realpath ~/Bureau/Programs/Planka)" || exit
+  if should_detach_process "$@"; then
+    # We change the locale to English because we grep the output
+    LC_ALL=C ./bin/planka 2>&1 | remove_theme_warning &
+  else
+    LC_ALL=C ./bin/planka 2>&1 | remove_theme_warning
+  fi
+}
+
+focus_window() {
+  wmctrl -a Planka
+}
+
+#~~~ Install ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+# ~~~ Main ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+main

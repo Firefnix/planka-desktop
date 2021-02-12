@@ -1,23 +1,23 @@
-#~~~ Main things ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~ Meta ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 CC = gcc
 .PHONY : clean
 
-#~~~ Sources ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~ Sources ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 main_SOURCE = src/main.c
 layout = glade/layout.glade
 
-
-#~~~ Paths ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~ Paths ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 CC_INCLUDE = -I./src
+SOURCE_DIR = src
+ROOT_DIR = $(shell realpath .)
 
-
-#~~~ Libraries ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~ Libraries ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 gtk3_flags ?= $(shell pkg-config --cflags --libs gtk+-3.0)
 webkit2_flags ?= $(shell pkg-config --cflags --libs webkit2gtk-4.0)
 libs_FLAGS ?= $(gtk3_flags) $(webkit2_flags)
 
 
-#~~~ Warnings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~ Warnings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 WARN ?= -Wall -Walloca -Walloc-zero  -Warray-bounds=2  -Wbad-function-cast \
 	-Wcast-align -Wcast-qual -Wdisabled-optimization -Wdouble-promotion \
 	-Wduplicated-branches -Wduplicated-cond -Wextra -Wfloat-conversion \
@@ -32,12 +32,12 @@ NO_WARN ?= -Wno-unused-parameter
 WARNINGS ?= $(WARN) $(NO_WARN)
 
 
-#~~~ Compiler options ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~ Compiler options ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 CC_OPTIONS ?= -pthread -rdynamic
 CFLAGS ?= $(CC_INCLUDE) $(CC_OPTIONS) $(libs_FLAGS) $(WARNINGS)
 
 
-#~~~~ TARGETS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~ TARGETS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 TARGET ?= bin/planka
 header_files ?= $(shell find ./src/ -name *.h)
 c_files = $(shell find ./src/ -name *.c)
@@ -46,7 +46,7 @@ objects_with_c ?= $(filter $(c_files), $(patsubst %.h,%.c,$(header_files)))
 # TODO: Select all .h files near to a .c file
 OBJECTS ?= $(patsubst ./src/%.c,./obj/%.o,$(objects_with_c))
 
-#~~~ Build rules ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~ Build rules ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 $(TARGET): $(main_SOURCE) $(OBJECTS)
 	@echo "🤖 $(main_SOURCE) -> $(TARGET)"
 	@$(CC) $(main_SOURCE) $(OBJECTS) -o $(TARGET) $(CFLAGS)
