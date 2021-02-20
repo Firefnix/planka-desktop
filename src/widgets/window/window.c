@@ -9,7 +9,7 @@ GtkWidget *get_window(void)
 	static GtkWidget *window = NULL;
 	if (!window) {
 		window = get_widget("window_main");
-		if (should_show_top_bar()) {
+		if (should_show_top_bar() == FALSE) {
 			gtk_window_set_decorated(GTK_WINDOW(window), FALSE);
 		}
 	}
